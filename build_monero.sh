@@ -5,7 +5,7 @@ MONERO_BRANCH=dev
 MONERO_SRC_DIR=${WORKDIR}/beldex
 CMAKE_TOOLCHAIN_FILE="${ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake"
 
-git clone https://github.com/beldex-coin/beldex.git ${MONERO_SRC_DIR} --branch ${MONERO_BRANCH}
+# # git clone https://github.com/beldex-coin/beldex.git ${MONERO_SRC_DIR} --branch ${MONERO_BRANCH} --recursive --depth=1
 cd $MONERO_SRC_DIR
 git submodule init
 git submodule update
@@ -27,6 +27,7 @@ case $arch in
 		ANDROID_CLANG=armv7a-linux-androideabi${API}-clang
 		ANDROID_CLANGPP=armv7a-linux-androideabi${API}-clang++
 		BUILD_64=OFF
+		BUILD_32=ON
 		TAG="android-armv7"
 		ARCH="armv7-a"
 		ARCH_ABI="armeabi-v7a"
@@ -35,6 +36,7 @@ case $arch in
 		ANDROID_CLANG=aarch64-linux-androideabi${API}-clang
 		ANDROID_CLANGPP=aarch64-linux-androideabi${API}-clang++
 		BUILD_64=ON
+		BUILD_32=OFF
 		TAG="android-armv8"
 		ARCH="armv8-a"
 		ARCH_ABI="arm64-v8a";;
@@ -42,6 +44,7 @@ case $arch in
 		ANDROID_CLANG=i686-linux-androideabi${API}-clang
 		ANDROID_CLANGPP=i686-linux-androideabi${API}-clang++
 		BUILD_64=OFF
+		BUILD_32=ON
 		TAG="android-x86"
 		ARCH="i686"
 		ARCH_ABI="x86";;
@@ -49,6 +52,7 @@ case $arch in
 		ANDROID_CLANG=x86_64-linux-androideabi${API}-clang
 		ANDROID_CLANGPP=x86_64-linux-androideabi${API}-clang++
 		BUILD_64=ON
+		BUILD_32=ON
 		TAG="android-x86_64"
 		ARCH="x86-64"
 		ARCH_ABI="x86_64";;
@@ -71,6 +75,7 @@ cd ./build/release
     -DLRELEASE_PATH="${PREFIX}/bin" \
     -DSTATIC=ON \
     -DBUILD_64=$BUILD_64 \
+	-DBUILD_32=$BUILD_32 \
     -DINSTALL_VENDORED_LIBUNBOUND=ON \
     -DUSE_DEVICE_TREZOR=OFF \
     -DBUILD_GUI_DEPS=1 \
@@ -80,6 +85,6 @@ cd ./build/release
 make wallet_api -j4
 find . -path ./lib -prune -o -name '*.a' -exec cp '{}' lib \;
 
-cp -r ./lib/* $DEST_LIB_DIR
-cp ../../src/wallet/api/wallet2_api.h  $DEST_INCLUDE_DIR
+cd /opt/android/cake_wallet  && cp -r ./lib/* $DEST_LIB_DIR
+cp -r ../beldex/src/wallet/api/wallet2_api.h  $DEST_INCLUDE_DIR
 done

@@ -10,7 +10,7 @@ ZLIB_FILE_PATH=$WORKDIR/$ZLIB_FILENAME
 ZLIB_SRC_DIR=$WORKDIR/zlib-1.2.11
 ZLIB_SHA256="c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1"
 
-wget https://zlib.net/$ZLIB_FILENAME -o $ZLIB_FILE_PATH
+curl https://zlib.net/$ZLIB_FILENAME -o $ZLIB_FILE_PATH
 echo $ZLIB_SHA256 $ZLIB_FILE_PATH | sha256sum -c - || exit 1
 
 tar -xzf $ZLIB_FILE_PATH -C $WORKDIR
@@ -18,7 +18,7 @@ cd $ZLIB_SRC_DIR
 CC=clang CXX=clang++ ./configure --static
 make
 
-wget https://www.openssl.org/source/$OPENSSL_FILENAME -o $OPENSSL_FILE_PATH
+curl https://www.openssl.org/source/$OPENSSL_FILENAME -o $OPENSSL_FILE_PATH
 echo $OPENSSL_SHA256 $OPENSSL_FILE_PATH | sha256sum -c - || exit 1
 
 for arch in "aarch" "aarch64" "i686" "x86_64"
